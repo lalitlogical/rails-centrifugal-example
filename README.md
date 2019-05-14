@@ -1,24 +1,12 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Start centrifugo service
+```centrifugo --config centrifugo.development.json --port=8001```
 
-Things you may want to cover:
+Update .env file
+`CENTRIFUGAL_HOST=http://localhost:8001`
+`CENTRIFUGAL_SECRET=asldjhkasdjkasdjkasdjkjkasd`
 
-* Ruby version
+Update centrifugo client with port
+`Client = Centrifuge::Client.new(scheme: :http, host: "localhost", port: 8001, secret: ENV['CENTRIFUGAL_SECRET'])`
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
