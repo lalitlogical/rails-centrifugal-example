@@ -1,0 +1,195 @@
+<div class="container">
+<h3 class=" text-center">Messaging</h3>
+<div class="messaging">
+  <div class="inbox_msg">
+    <div class="inbox_people">
+      <div class="headind_srch">
+        <div class="recent_heading">
+          <h4>Recent</h4>
+        </div>
+        <div class="srch_bar">
+          <div class="stylish-input-group">
+            <input type="text" class="search-bar"  placeholder="Search" >
+            <span class="input-group-addon">
+            <button type="button"> <i class="fa fa-search" aria-hidden="true"></i> </button>
+            </span> </div>
+        </div>
+      </div>
+      <div class="inbox_chat">
+        <div class="chat_list active_chat">
+          <div class="chat_people">
+            <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+            <div class="chat_ib">
+              <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
+              <p>Test, which is a new approach to have all solutions
+                astrology under one roof.</p>
+            </div>
+          </div>
+        </div>
+        <div class="chat_list">
+          <div class="chat_people">
+            <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+            <div class="chat_ib">
+              <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
+              <p>Test, which is a new approach to have all solutions
+                astrology under one roof.</p>
+            </div>
+          </div>
+        </div>
+        <div class="chat_list">
+          <div class="chat_people">
+            <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+            <div class="chat_ib">
+              <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
+              <p>Test, which is a new approach to have all solutions
+                astrology under one roof.</p>
+            </div>
+          </div>
+        </div>
+        <div class="chat_list">
+          <div class="chat_people">
+            <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+            <div class="chat_ib">
+              <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
+              <p>Test, which is a new approach to have all solutions
+                astrology under one roof.</p>
+            </div>
+          </div>
+        </div>
+        <div class="chat_list">
+          <div class="chat_people">
+            <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+            <div class="chat_ib">
+              <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
+              <p>Test, which is a new approach to have all solutions
+                astrology under one roof.</p>
+            </div>
+          </div>
+        </div>
+        <div class="chat_list">
+          <div class="chat_people">
+            <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+            <div class="chat_ib">
+              <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
+              <p>Test, which is a new approach to have all solutions
+                astrology under one roof.</p>
+            </div>
+          </div>
+        </div>
+        <div class="chat_list">
+          <div class="chat_people">
+            <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+            <div class="chat_ib">
+              <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
+              <p>Test, which is a new approach to have all solutions
+                astrology under one roof.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mesgs">
+      <div class="msg_history">
+
+      </div>
+      <div class="type_msg">
+        <div class="input_msg_write">
+          <input type="text" class="write_msg" placeholder="Type a message" />
+          <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="text-center top_spac"> Design by <a target="_blank" href="#">Sunil Rajput</a></p>
+
+</div></div>
+
+<!-- <button onclick="notifyMe()">Notify me!</button> -->
+
+<script type="text/javascript">
+  // initiliaze centrifuge
+  var centrifuge = new Centrifuge({
+     url: "<%= ENV['CENTRIFUGAL_HOST'] %>",
+     user: '<%= @user %>',
+     timestamp: '<%= @timestamp %>',
+     token: '<%= @token %>',
+     debug: true
+   });
+
+   centrifuge.subscribe("public-channel", function(message) {
+     console.log(message);
+     if ('<%= @user %>' !== message.data.user) {
+       incoming_msg('<%= @user %>', message.data.message);
+     }
+     // var notification = new Notification(message.data.message);
+     // notification.onclick = function(event) {
+       // window.focus();
+     // }
+   });
+
+  centrifuge.connect();
+
+  function notifyMe() {
+    // Let's check if the browser supports notifications
+    if (!("Notification" in window)) {
+      alert("This browser does not support desktop notification");
+    }
+
+    // Let's check whether notification permissions have already been granted
+    else if (Notification.permission === "granted") {
+      // If it's okay let's create a notification
+      var notification = new Notification("Hi there!");
+    }
+
+    // Otherwise, we need to ask the user for permission
+    else if (Notification.permission !== "denied") {
+      Notification.requestPermission().then(function (permission) {
+        // If the user accepts, let's create a notification
+        if (permission === "granted") {
+          var notification = new Notification("Hi there!");
+        }
+      });
+    }
+
+    // At last, if the user has denied notifications, and you
+    // want to be respectful there is no need to bother them any more.
+  }
+
+  $('.msg_send_btn').click(function(){
+    $.post("/chats", { message: $('.write_msg').val(), user: '<%= @user %>' },
+    function(data, status){
+      outgoing_msg('<%= @user %>', $('.write_msg').val());
+      $('.write_msg').val('');
+    });
+  });
+
+  incoming_msg = function(user, message) {
+    content = '<div class="incoming_msg">'
+    content += '<div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>'
+      content += '<div class="received_msg">'
+        content += '<div class="received_withd_msg">'
+          content += '<p>' + message + '</p>'
+          content += '<span class="time_date"> 11:01 AM    |    June 9</span></div>'
+      content += '</div>'
+    content += '</div>'
+
+    append_and_scroll(content);
+  }
+
+  outgoing_msg = function(user, message) {
+    content = '<div class="outgoing_msg">'
+      content += '<div class="sent_msg">'
+        content += content += '<p>' + message + '</p>'
+        content += '<span class="time_date"> 11:01 AM    |    Today</span> </div>'
+    content += '</div>'
+
+    append_and_scroll(content);
+  }
+
+  append_and_scroll = function(content) {
+    $('.msg_history')
+      .append(content)
+      .animate({ scrollTop: 88888888888 }, 1000);
+  }
+</script>
